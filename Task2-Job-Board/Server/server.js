@@ -6,6 +6,7 @@ import connectDB from './config/db.js';  // MongoDB connection
 import userRoutes from './routes/userRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
+import emailRoutes from './routes/emailRoutes.js'; // Adjust the import path
 import { protect } from './middleware/authMiddleware.js';
 import session from 'express-session';
 import passport from './middleware/passport.js';
@@ -23,6 +24,10 @@ dotenv.config();
 const app = express();
 
 // Middleware
+app.use(express.json()); // To parse JSON request bodies
+
+// Use email routes
+app.use('/api/notifications', emailRoutes);
 
 // Use Helmet to set security-related HTTP headers
 app.use(helmet());
