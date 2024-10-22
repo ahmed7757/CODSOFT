@@ -215,29 +215,25 @@
         "method": "POST",
         "header": [
           {
-            "key": "Content-Type",
-            "value": "application/json"
-          },
-          {
             "key": "Authorization",
             "value": "Bearer {{jwt_token}}"
           }
         ],
         "body": {
-  "mode": "formdata",
-  "formdata": [
-    {
-      "key": "resume",
-      "type": "file",
-      "src": "/path/to/local/resume.pdf"
-    },
-    {
-      "key": "coverLetter",
-      "type": "text",
-      "value": "I am excited to apply for this role."
-    }
-  ]
-},
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "resume",
+              "type": "file",
+              "src": "/path/to/local/resume.pdf"
+            },
+            {
+              "key": "coverLetter",
+              "type": "text",
+              "value": "I am excited to apply for this role."
+            }
+          ]
+        },
         "url": {
           "raw": "http://localhost:5000/api/applications/apply/{{jobId}}",
           "protocol": "http",
@@ -247,12 +243,12 @@
         }
       },
       "response": [
-  {
-    "name": "Unauthorized",
-    "status": 401,
-    "body": "{\"message\": \"Unauthorized, invalid token\"}"
-  }
-]
+        {
+          "name": "Unauthorized",
+          "status": 401,
+          "body": "{\"message\": \"Unauthorized, invalid token\"}"
+        }
+      ]
     },
     {
       "name": "Get User Applications",
@@ -300,7 +296,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\"status\": \"under review\"}"
+          "raw": "{\"applicationId\": \"{{applicationId}}\", \"status\": \"under review\"}"
         },
         "url": {
           "raw": "http://localhost:5000/api/applications/application/{{applicationId}}",
@@ -311,12 +307,12 @@
         }
       },
       "response": [
-  {
-    "name": "Unauthorized",
-    "status": 401,
-    "body": "{\"message\": \"Unauthorized, invalid token\"}"
-  }
-]
+        {
+          "name": "Success",
+          "status": 200,
+          "body": "{\"message\": \"Application status updated and email sent!\"}"
+        }
+      ]
     },
     {
       "name": "Send Test Email",
@@ -324,10 +320,18 @@
         "method": "POST",
         "header": [
           {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
             "key": "Authorization",
             "value": "Bearer {{jwt_token}}"
           }
         ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"to\": \"recipient@example.com\", \"subject\": \"Test Email\", \"text\": \"This is a test email.\"}"
+        },
         "url": {
           "raw": "http://localhost:5000/api/notifications/test-email",
           "protocol": "http",
@@ -337,7 +341,7 @@
         }
       },
       "response": []
-    }    
+    }          
   ],
   "variable": [
     {

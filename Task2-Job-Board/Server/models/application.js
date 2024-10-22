@@ -15,10 +15,11 @@ const applicationSchema = new Schema({
         type: String,
         required: true,
         validate: {
-            validator: function(v) {
-                return /^(http|https):\/\/[^ "]+$/.test(v);  // URL validation
+            validator: function (v) {
+                // Adjust to accept valid local file paths in the 'uploads/' directory
+                return /^uploads\/.+\.[a-zA-Z0-9]+$/.test(v);  // Validate file paths, e.g., 'uploads/filename.pdf'
             },
-            message: 'Please provide a valid resume URL'
+            message: 'Please provide a valid resume file path'
         }
     },
     coverLetter: {
@@ -30,10 +31,6 @@ const applicationSchema = new Schema({
         enum: ['applied', 'under review', 'accepted', 'rejected', 'withdrawn'],
         default: 'applied'
     },
-    statusUpdatedAt: {
-        type: Date,
-        default: Date.now  // Tracks when the status was last updated
-    }
 }, {
     timestamps: true
 });
