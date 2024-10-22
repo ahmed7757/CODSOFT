@@ -78,9 +78,10 @@ export const deleteJob = async (req, res) => {
       return res.status(404).json({ error: 'Job not found' });
     }
 
-    await job.remove();
+    await job.deleteOne();
     res.status(200).json({ message: 'Job deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
+    console.log(error);
   }
 };

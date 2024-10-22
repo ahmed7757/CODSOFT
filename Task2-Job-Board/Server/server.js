@@ -7,6 +7,14 @@ import userRoutes from './routes/userRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
 import { protect } from './middleware/authMiddleware.js';
+import session from 'express-session';
+import passport from './middleware/passport.js';
+import helmet from 'helmet';  // For securing HTTP headers
+import rateLimit from 'express-rate-limit';  // For rate limiting
+import mongoSanitize from 'express-mongo-sanitize';  // For preventing NoSQL injection
+import hpp from 'hpp';  // To prevent HTTP parameter pollution
+import path from 'path';
+import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
@@ -15,8 +23,65 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(express.json());  // To parse JSON bodies
-app.use(cors());  // Enable CORS
+
+// Use Helmet to set security-related HTTP headers
+app.use(helmet());
+
+// Enable CORS (you can configure specific origins if needed)
+app.use(cors());
+
+// Rate Limiting - limits each IP to 100 requests per 10 minutes
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000,  // 10 minutes
+  max: 100,  // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again after 10 minutes'
+});
+app.use(limiter);
+
+// Body parser for JSON
+app.use(express.json());
+
+// Data sanitization against NoSQL injection
+app.use(mongoSanitize());
+
+// Prevent HTTP parameter pollution
+app.use(hpp());
+
+// Enable HTTPS (ensure you have an SSL certificate)
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  const privateKey = fs.readFileSync(path.join(__dirname, 'ssl', 'key.pem'), 'utf8');
+  const certificate = fs.readFileSync(path.join(__dirname, 'ssl', 'cert.pem'), 'utf8');
+  const credentials = { key: privateKey, cert: certificate };
+  const https = require('https');
+  const server = https.createServer(credentials, app);
+
+  // Start the HTTPS server
+  server.listen(process.env.PORT || 5000, () => {
+    console.log(`Secure server running on port ${process.env.PORT || 5000}`);
+  });
+} else {
+  // Start HTTP server in non-production environments
+  app.listen(process.env.PORT || 5000, () => {
+    console.log(`Server running on port ${process.env.PORT || 5000}`);
+  });
+}
+
+// Session management
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',  // Ensure cookies are sent over HTTPS in production
+    httpOnly: true,  // Prevent client-side JS from accessing the cookies
+    maxAge: 24 * 60 * 60 * 1000  // Set cookie expiration (1 day)
+  }
+}));
+
+// Initialize passport session
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Connect to MongoDB
 connectDB();
@@ -29,12 +94,4 @@ app.use('/api/applications', protect, applicationRoutes);  // Application routes
 // Root endpoint for checking server status
 app.get('/', (req, res) => {
   res.send('API is running...');
-});
-
-// Set up the server port from .env file or default to 5000
-const PORT = process.env.PORT || 5000;
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
