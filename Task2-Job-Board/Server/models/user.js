@@ -11,31 +11,37 @@ const profileSchema = new Schema({
     },
     resume: {
         type: String,
-        required: function() { return this.role === 'job_seeker'; }  // Conditional requirement
+        required: function () { return this.role === 'job_seeker'; }  // Conditional requirement
     },
     profilePicture: {
         type: String,
-        required: function() { return this.role === 'job_seeker'; }
+        required: function () { return this.role === 'job_seeker'; }
     },
     companyName: {
         type: String,
-        required: function() { return this.role === 'employer'; }
+        required: function () { return this.role === 'employer'; }
     },
     companyWebsite: {
         type: String,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /^(http|https):\/\/[^ "]+$/.test(v);
             },
             message: 'Please enter a valid URL'
         },
-        required: function() { return this.role === 'employer'; }
+        required: function () { return this.role === 'employer'; }
     }
 });
 
 // User schema
 const userSchema = new Schema({
     email: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true
+    },
+    userName: {
         type: String,
         required: true,
         unique: true,
