@@ -9,13 +9,18 @@ const profileSchema = new Schema({
         type: String,
         required: true
     },
+    gender: {
+        type: String,
+        enum: ["male", "female"],
+        required: true
+    },
     resume: {
         type: String,
-        required: function () { return this.role === 'job_seeker'; }  // Conditional requirement
+        required: function () { return this.role === 'candidate'; }  // Conditional requirement
     },
     profilePicture: {
         type: String,
-        required: function () { return this.role === 'job_seeker'; }
+        required: function () { return this.role === 'candidate'; }
     },
     companyName: {
         type: String,
@@ -53,7 +58,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['employer', 'job_seeker'],
+        enum: ['employer', 'candidate'],
         required: true
     },
     profile: profileSchema  // Embedding the profile sub-schema
