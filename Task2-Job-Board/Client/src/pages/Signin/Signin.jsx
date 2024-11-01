@@ -14,8 +14,7 @@ const Signin = () => {
     const navigate = useNavigate();
     const USER_REGEX = /^[A-z][A-z0-9-_]{2,23}$/;
 
-    const [email, setEmail] = useState("")
-    const [userName, setUserName] = useState("")
+    const [user, setUser] = useState("")
     const [validUser, setValidUser] = useState(false)
     const [userFocus, setUserFocus] = useState(false)
 
@@ -28,7 +27,7 @@ const Signin = () => {
 
 
     const onUserChange = (e) => {
-        validator.isEmail(e.target.value) ? setEmail(e.target.value) : setUserName(e.target.value);
+        setUser(e.target.value);
         setValidUser(USER_REGEX.test(e.target.value) || validator.isEmail(e.target.value));
     };
 
@@ -37,39 +36,41 @@ const Signin = () => {
         setValidPwd(validator.isStrongPassword(e.target.value));
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validName || !validPwd) {
+        if (!validUser || !validPwd) {
             setErrMsg("Invalid Entry");
             return;
         }
+
         try {
-            const response = await axios.post(Signin_URL, JSON.stringify({
-                userName,
-                email,
-                password,
-            }), {
+            const payload = USER_REGEX.test(user)
+                ? { userName: user, password }
+                : { email: user, password };
+
+            const response = await axios.post(Signin_URL, payload, {
                 headers: {
                     "Content-Type": "application/json"
                 }
-            })
-            const data = response.data.token;
-            if (data !== undefined) {
+            });
+
+            const token = response.data.token;
+            if (token) {
                 if (stayLoggedIn) {
-                    localStorage.setItem("token", data);
+                    localStorage.setItem("token", token);
                 } else {
-                    sessionStorage.setItem("token", data);
+                    sessionStorage.setItem("token", token);
                 }
-                loggedInData.setLoggedUser(data);
+                loggedInData.setLoggedUser(token);
                 navigate("/landing");
             }
         } catch (error) {
-            console.error(error)
-            setErrMsg(error.response.data.message);
+            console.error(error);
+            setErrMsg(error.response?.data?.message || "Login failed");
         }
-    }
+    };
+
+
 
     return (
         <div className="flex flex-col gap-3">
@@ -77,7 +78,21 @@ const Signin = () => {
                 <h1 className="text-4xl font-semibold">Sign in</h1>
                 <p className="text-gray-400">Don't have account? <Link to={"/signup"} className="text-info dark:text-gray-300 dark:hover:text-gray-200 font-semibold">Create Account</Link></p>
             </div>
-            <form className="grid grid-cols-2 gap-3">
+            {errMsg && <div role="alert" className="alert alert-error">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{errMsg}</span>
+            </div>}
+            <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3">
                 <div className="relative space-y-1 col-span-2">
                     <label htmlFor="userName" className="absolute top-4 right-2 z-10">
                         <FaCheck
@@ -85,13 +100,13 @@ const Signin = () => {
                         />
                         <FaTimes
                             className={
-                                validUser || !userName ? "hidden" : "visible text-red-600"
+                                validUser || !user ? "hidden" : "visible text-red-600"
                             }
                         />
                     </label>
                     <input
                         type="text"
-                        value={userName}
+                        value={user}
                         name="userName"
                         id="userName"
                         onChange={onUserChange}
@@ -106,7 +121,7 @@ const Signin = () => {
                     <p
                         id="uidnote"
                         className={
-                            userFocus && userName && !validUser
+                            userFocus && !validUser
                                 ? "visible text-xs items-start flex gap-1 bg-neutral-800 text-white rounded-md p-1"
                                 : "hidden"
                         }
@@ -174,7 +189,6 @@ const Signin = () => {
                 </div>
                 <button
                     type="submit"
-                    onClick={handleSubmit}
                     disabled={
                         !validUser || !validPwd
                             ? true
