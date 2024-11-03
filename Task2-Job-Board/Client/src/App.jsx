@@ -4,6 +4,8 @@ import RegLogLayout from "./pages/Layouts/regLogLayout";
 import Signin from "./pages/Signin/Signin";
 import { useState } from "react";
 import { UserContext } from "./context/user";
+import Layout from "./pages/Layouts/Layout";
+import Home from "./pages/Home/Home";
 
 const App = () => {
   const userData = localStorage.getItem("token")
@@ -16,6 +18,9 @@ const App = () => {
           <Route element={<RegLogLayout />}>
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} />
+          </Route>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>
