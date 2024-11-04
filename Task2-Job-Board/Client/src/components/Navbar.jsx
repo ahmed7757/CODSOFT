@@ -50,14 +50,14 @@ const Navbar = () => {
                 </label>
             </nav>
             <div className="flex px-24 justify-between items-center">
-                <img src={theme === "light" ? lightLogo : darkLogo} className="w-auto h-28" alt="Jobify" />
+                <img src={theme === "light" ? lightLogo : darkLogo} className="w-auto h-24" alt="Jobify" />
                 <div className="flex border-2 rounded-md pl-2 gap-2 w-1/2 items-center">
                     <FiSearch className="text-gray-500 h-8 w-auto" />
                     <input type="search" className="border-0 text-lg w-full placeholder:text-lg ring-0 focus:border-0 py-3 px-2 focus:ring-0 h-full" placeholder="Search for job" />
                 </div>
                 <div className="flex gap-2">
-                    <Link to={"/signin"} className="rounded px-4 py-2 text-md border-2 text-blue-600">Sign In</Link>
-                    <Link to={"/"} className="rounded px-4 py-2 text-md text-white bg-blue-600">Post A Jobs</Link>
+                    <Link to={"/signin"} className="rounded px-3 py-2 text-md border-2 text-blue-600">Sign In</Link>
+                    <Link to={"/"} className="rounded px-3 py-2 text-md text-white bg-blue-600">Post A Jobs</Link>
                 </div>
             </div>
         </header>
