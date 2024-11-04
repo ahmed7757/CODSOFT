@@ -4,10 +4,10 @@ import { PiBuildingOfficeDuotone } from "react-icons/pi";
 import { PiUsersDuotone } from "react-icons/pi";
 const Hero = () => {
     return (
-        <section className="bg-gray-100 py-12">
-            <div className="px-4 md:px-12 lg:px-24 space-y-8">
-                <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start">
-                    <div className="flex flex-col gap-6 text-center lg:text-left">
+        <section className="bg-gray-100 py-12 container ">
+            <div className="px-4 md:px-12 lg:px-24 flex flex-col gap-8 w-full">
+                <div className="flex flex-col gap-6 md:gap-0 md:flex-row lg:flex-row justify-between items-center lg:items-start">
+                    <div className="flex flex-col gap-3 sm:gap-6 text-center items-center md:items-start md:text-left">
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold max-w-xl leading-snug">
                             Find a job that suits your interest & skills.
                         </h1>
@@ -18,9 +18,7 @@ const Hero = () => {
                             Get Started
                         </button>
                     </div>
-                    <div className="mt-8 lg:mt-0">
-                        <img src={HeroImg} alt="img" className="h-48 md:h-72 lg:h-96 w-auto" />
-                    </div>
+                    <img src={HeroImg} alt="img" className="h-60 md:h-72 lg:h-96 w-auto" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex items-center px-4 py-3 rounded flex-row bg-gray-50 gap-4">
