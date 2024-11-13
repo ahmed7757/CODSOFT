@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'card-img-1': "url('./src/assets/labtop.svg')",
+        'card-img-2': "url('./src/assets/maninsuit.svg')",
+      }
+    },
   },
   plugins: [
     require('daisyui'),

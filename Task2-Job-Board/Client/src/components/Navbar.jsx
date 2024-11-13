@@ -39,7 +39,7 @@ const Navbar = () => {
                     <li><Link to={"/"}>Employers</Link></li>
                     <li><Link to={"/"}>Candidates</Link></li>
                 </ul>
-                <label className="swap hidden sm:flex swap-rotate py-1">
+                <label className="swap invisible sm:visible swap-rotate py-1">
                     <input onChange={handleToggle} checked={theme === "dark"} type="checkbox" className="theme-controller" />
 
                     <svg className="swap-on h-6 w-6 sm:h-8 sm:w-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
