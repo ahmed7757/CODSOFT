@@ -6,7 +6,7 @@ const RegisterNow = () => {
         <section className="container py-12 bg-gray-100">
             <div className="px-4 md:px-12 lg:px-24 flex items-center gap-8 w-full">
                 <div className="p-10 rounded-lg flex flex-col gap-3 bg-card-img-1 bg-cover bg-neutral-300">
-                    <h2 className="text-3xl font-semibold">Become a candidate</h2>
+                    <h2 className="text-3xl font-semibold">Become a Candidate</h2>
                     <p className="w-1/2 text-base text-gray-500">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi, ipsam.</p>
                     <Link className="px-5 py-3 rounded-md flex items-center gap-1 bg-slate-50 w-fit text-md">Register Now <IoArrowForward /></Link>
                 </div>
