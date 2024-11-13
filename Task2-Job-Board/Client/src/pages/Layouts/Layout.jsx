@@ -1,17 +1,17 @@
 // Description: Layout component for the job board application.
 
-import { Outlet } from "react-router-dom"
-import Navbar from "../../components/Navbar"
-import Footer from "../../components/Footer"
+import { Outlet } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 const Layout = () => {
-    return (
-        <div className="container overflow-x-hidden mx-auto">
-            <Navbar />
-            <Outlet />
-            <Footer />
-        </div>
-    )
-}
+  return (
+    <div className=" overflow-x-hidden mx-auto">
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
 
-export default Layout
+export default Layout;
