@@ -10,13 +10,13 @@ const Footer = () => {
     return (
         <footer className="container bg-neutral-900">
             <div className="space-y-2 items-center gap-8 w-full ">
-                <div className="flex justify-between gap-6 py-8 items-center w-full px-4 md:px-12 lg:px-24">
+                <div className="flex flex-col md:flex-row justify-between gap-6 py-8 md:items-center w-full px-4 md:px-12 lg:px-24">
                     <div className="space-y-4 text-slate-500">
                         <img src={darkLogo} alt="" className="w-auto h-16 sm:h-24" />
                         <p>Call now: <strong className="text-white">01234567890</strong></p>
                         <address>Lorem ipsum dolor sit amet consectetur adipisicing elit.</address>
                     </div>
-                    <div className="grid grid-cols-4 gap-6 text-slate-500">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-slate-500">
                         <div className="space-y-3">
                             <h3 className="text-white text-xl font-semibold">Quick Links</h3>
                             <ul className="flex flex-col gap-3">

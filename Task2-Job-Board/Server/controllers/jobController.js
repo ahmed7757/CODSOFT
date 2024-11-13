@@ -1,8 +1,9 @@
+import rateLimit from 'express-rate-limit';
 import Job from '../models/Job.js';
 
 // Create Job
 export const createJob = async (req, res) => {
-  const { title, description, requirements, location, salaryRange, jobType } = req.body;
+  const { title, description, requirements, location, salaryRange, jobType, companyName } = req.body;
 
   try {
     const newJob = new Job({
@@ -12,6 +13,7 @@ export const createJob = async (req, res) => {
       location,
       salaryRange,
       jobType,
+      companyName,
       employer: req.user.id  // Assuming user is authenticated
     });
 
@@ -23,14 +25,28 @@ export const createJob = async (req, res) => {
 };
 
 // Read All Jobs
-export const getAllJobs = async (req, res) => {
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+export const getAllJobs = [limiter, async (req, res) => {
   try {
-    const jobs = await Job.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const jobs = await Job.find().skip(skip).limit(limit);
     res.status(200).json(jobs);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ error: 'Validation error' });
+    } else if (error.name === 'MongoNetworkError') {
+      res.status(503).json({ error: 'Database connection error' });
+    } else {
+      res.status(500).json({ error: 'Server error' });
+    }
   }
-};
+}];
 
 // Read Job by ID
 export const getJobById = async (req, res) => {

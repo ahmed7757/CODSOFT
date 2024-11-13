@@ -8,6 +8,13 @@ const jobSchema = new Schema({
     minlength: [3, 'Job title must be at least 3 characters long'],
     maxlength: [100, 'Job title must be less than 100 characters'],
   },
+  companyName: {
+    type: String,
+    required: [true, 'Company name is required'],
+    trim: true,
+    minlength: [3, 'Company name must be at least 3 characters long'],
+    maxlength: [100, 'Company name must be less than 100 characters'],
+  },
   description: {
     type: String,
     required: [true, 'Job description is required'],
