@@ -5,8 +5,8 @@ import { PiMagnifyingGlassPlusDuotone } from "react-icons/pi";
 
 const HowItWorks = () => {
   return (
-    <section className="py-12">
-      <div className="px-4 md:px-12 lg:px-24 flex flex-col items-center gap-8 w-full">
+    <section className="py-12 flex justify-center">
+      <div className="px-4 md:px-12 lg:px-24 flex flex-col items-center gap-8 w-full lg:w-[90%] max-w-[1920px]">
         <h2 className="font-bold text-5xl">How Jobify work</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="flex flex-col items-center gap-3">

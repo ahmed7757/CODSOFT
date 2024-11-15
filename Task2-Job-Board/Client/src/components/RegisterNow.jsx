@@ -3,8 +3,8 @@ import { IoArrowForward } from "react-icons/io5";
 
 const RegisterNow = () => {
   return (
-    <section className=" py-12 bg-gray-100 ">
-      <div className="px-4 md:px-12 lg:px-24 flex flex-col md:flex-row lg:justify-center items-center gap-8 w-full">
+    <section className=" py-12 bg-gray-100 flex justify-center">
+      <div className="px-4 md:px-12 lg:px-24 flex flex-col md:flex-row lg:justify-between items-center gap-8 w-full lg:w-[90%] max-w-[1920px]">
         <div className="p-10 rounded-lg flex flex-col gap-3 bg-card-img-1 bg-cover bg-neutral-300">
           <h2 className="text-3xl font-semibold">Become a Candidate</h2>
           <p className="w-1/2 text-base text-gray-500">

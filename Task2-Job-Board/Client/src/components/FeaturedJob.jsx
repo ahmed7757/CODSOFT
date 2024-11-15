@@ -25,8 +25,8 @@ const FeaturedJob = () => {
     fetchFeaturedJob();
   }, []);
   return (
-    <section className="py-12 ">
-      <div className="px-4 md:px-12 lg:px-24 flex flex-col gap-8 w-full">
+    <section className="py-12 flex justify-center">
+      <div className="px-4 md:px-12 lg:px-24 flex flex-col gap-8 w-full lg:w-[90%] max-w-[1920px]">
         <div className="flex justify-between items-center">
           <h2 className="text-4xl font-semibold">Featured Jobs</h2>
           <Link to="/jobs" className="text-blue-500">

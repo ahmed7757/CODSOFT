@@ -6,8 +6,8 @@ import { FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className=" bg-neutral-900">
-      <div className="space-y-2 items-center gap-8 w-full ">
+    <footer className=" bg-neutral-900 flex justify-center">
+      <div className="space-y-2 items-center gap-8 w-full lg:w-[90%] max-w-[1920px]">
         <div className="flex flex-col md:flex-row justify-between gap-6 py-8 md:items-center w-full px-4 md:px-12 lg:px-24">
           <div className="space-y-4 text-slate-500">
             <img src={darkLogo} alt="" className="w-auto h-16 sm:h-24" />
