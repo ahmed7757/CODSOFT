@@ -16,6 +16,7 @@ import mongoSanitize from 'express-mongo-sanitize';  // For preventing NoSQL inj
 import hpp from 'hpp';  // To prevent HTTP parameter pollution
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 // Load environment variables
 dotenv.config();
@@ -51,6 +52,11 @@ app.use(mongoSanitize());
 
 // Prevent HTTP parameter pollution
 app.use(hpp());
+
+// Serve static files from the React app
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Enable HTTPS (ensure you have an SSL certificate)
 if (process.env.NODE_ENV === 'production') {

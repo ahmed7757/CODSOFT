@@ -6,6 +6,8 @@ import { useState } from "react";
 import { UserContext } from "./context/user";
 import Layout from "./pages/Layouts/Layout";
 import Home from "./pages/Home/Home";
+import FindJop from "./pages/FindJop/FindJop";
+import JobDetails from "./pages/JobDetails/JobDetails";
 
 const App = () => {
   const userData = localStorage.getItem("token")
@@ -21,6 +23,8 @@ const App = () => {
           </Route>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/findjop" element={<FindJop />} />
+            <Route path="/findjop/jobdetails/:id" element={<JobDetails />} />
           </Route>
         </Routes>
       </BrowserRouter>

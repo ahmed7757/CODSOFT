@@ -22,7 +22,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="">
+    <header className="shadow">
       <nav className="flex justify-center   bg-gray-200 ">
         <div className="flex justify-between w-full items-center px-4 md:px-12 lg:px-24 lg:w-[90%] max-w-[1920px]">
           <label className="swap sm:hidden swap-rotate py-1">

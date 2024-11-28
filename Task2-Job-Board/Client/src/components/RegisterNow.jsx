@@ -11,7 +11,7 @@ const RegisterNow = () => {
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi,
             ipsam.
           </p>
-          <Link className="px-5 py-3 rounded-md flex items-center gap-1 bg-slate-50 w-fit text-md">
+          <Link to={"/signup"} className="px-5 py-3 rounded-md flex items-center gap-1 bg-slate-50 w-fit text-md">
             Register Now <IoArrowForward />
           </Link>
         </div>
@@ -21,7 +21,7 @@ const RegisterNow = () => {
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi,
             ipsam.
           </p>
-          <Link className="px-5 py-3 rounded-md flex items-center gap-1 bg-slate-50 w-fit text-md">
+          <Link to={"/signup"} className="px-5 py-3 rounded-md flex items-center gap-1 bg-slate-50 w-fit text-md">
             Register now <IoArrowForward />
           </Link>
         </div>

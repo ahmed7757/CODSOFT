@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useState, useEffect } from "react";
 const FeaturedJob = () => {
-  const GETJOP_URL = "/jobs//getJobs";
+  const GETJOP_URL = "/jobs/getJobs";
   const [featuredJob, setFeaturedJob] = useState(null);
   useEffect(() => {
     const fetchFeaturedJob = async () => {
@@ -29,7 +29,7 @@ const FeaturedJob = () => {
       <div className="px-4 md:px-12 lg:px-24 flex flex-col gap-8 w-full lg:w-[90%] max-w-[1920px]">
         <div className="flex justify-between items-center">
           <h2 className="text-4xl font-semibold">Featured Jobs</h2>
-          <Link to="/jobs" className="text-blue-500">
+          <Link to="/findjop" className="text-blue-500">
             View all
           </Link>
         </div>
