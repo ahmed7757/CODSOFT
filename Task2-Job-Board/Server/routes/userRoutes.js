@@ -9,13 +9,13 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get(
-    '/profile',
+    '/getProfile',
     bodyParser.json(),
     protect,
     getProfile
 );
 router.patch(
-    '/profile',
+    '/updateProfile',
     bodyParser.json(),
     protect,
     upload.fields([{ name: 'profilePicture', maxCount: 1 }, { name: 'resume', maxCount: 1 }]),
