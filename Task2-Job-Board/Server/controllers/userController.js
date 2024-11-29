@@ -1,41 +1,37 @@
-import User from '../models/user.js';
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
+import User from "../models/user.js";
+import jwt from "jsonwebtoken";
+import fs from "fs";
 
 // Register User
 export const registerUser = async (req, res) => {
-  const { email, password, role, userName, name, companyName, gender } = req.body;
+  const body = req.body;
+  console.log(req.body);
 
   try {
     // Check if email or userName already exists
-    const userExists = await User.findOne({ $or: [{ email }, { userName }] });
+    const userExists = await User.findOne({
+      $or: [{ email: body.email }, { userName: body.userName }],
+    });
     if (userExists) {
-      const existingField = userExists.email === email ? 'Email' : 'Username';
-      return res.status(400).json({ message: `${existingField} already exists` });
+      const existingField = userExists.email === email ? "Email" : "Username";
+      return res
+        .status(400)
+        .json({ message: `${existingField} already exists` });
     }
 
     // Create new user
-    const newUser = new User({
-      email,
-      password,
-      role,
-      userName,
-      profile: {
-        name,
-        gender,
-        companyName: role === 'employer' ? companyName : undefined,
-      }
-    });
+    const newUser = new User(body);
+
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     if (error.code === 11000) {
-      const duplicateField = error.keyPattern.email ? 'Email' : 'Username';
+      const duplicateField = error.keyPattern.email ? "Email" : "Username";
       res.status(400).json({ message: `${duplicateField} already exists` });
     } else {
       console.error(error);
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json({ error: "Server error" });
     }
   }
 };
@@ -50,42 +46,47 @@ export const loginUser = async (req, res) => {
 
     if (!user) {
       console.log("Invalid username or email or password");
-      return res.status(400).json({ message: 'Invalid username or email or password' });
+      return res
+        .status(400)
+        .json({ message: "Invalid username or email or password" });
     }
 
     const isMatch = await user.matchPassword(password, user.password);
 
     if (!isMatch) {
       console.log("Invalid username or email or password");
-      return res.status(400).json({ message: 'Invalid username or email or password' });
+      return res
+        .status(400)
+        .json({ message: "Invalid username or email or password" });
     }
 
-
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.status(200).json({ token, message: 'Login successful' });
+    res.status(200).json({ token, message: "Login successful" });
   } catch (error) {
     console.error("Server error:", error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
 export const getProfile = async (req, res) => {
-  let userId = req.currentUser._id;
+  let userId = req.user.id;
   if (!userId) {
-    return res.status(400).json({ message: 'User not found' });
+    return res.status(400).json({ message: "User not found" });
   }
   const user = await User.findById(userId);
   res.status(200).json({
-    message: 'User found',
-    user
+    message: "User found",
+    user,
   });
-}
+};
 
 export const updateProfile = async (req, res) => {
   try {
-    const userId = req.currentUser?._id; // Ensure this is set by middleware
+    const userId = req.user?.id; // Ensure this is set by middleware
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized user" });
     }
@@ -108,16 +109,22 @@ export const updateProfile = async (req, res) => {
 
     // Check if username or email already exists (only if updated)
     if (updatedProfile.userName && updatedProfile.userName !== user.userName) {
-      const existingUserName = await User.findOne({ userName: updatedProfile.userName });
+      const existingUserName = await User.findOne({
+        userName: updatedProfile.userName,
+      });
       if (existingUserName) {
-        return res.status(400).json({ message: "Username already exists", code: 4002 });
+        return res
+          .status(400)
+          .json({ message: "Username already exists", code: 4002 });
       }
     }
 
     if (updatedProfile.email && updatedProfile.email !== user.email) {
       const existingEmail = await User.findOne({ email: updatedProfile.email });
       if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists", code: 4003 });
+        return res
+          .status(400)
+          .json({ message: "Email already exists", code: 4003 });
       }
     }
 
@@ -137,8 +144,10 @@ const applyProfileUpdates = (user, updatedProfile, filename) => {
   user.email = updatedProfile.email || user.email;
   user.profile.gender = updatedProfile.gender || user.profile.gender;
   user.profile.name = updatedProfile.name || user.profile.name;
-  user.profile.companyName = updatedProfile.companyName || user.profile.companyName;
-  user.profile.companyWebsite = updatedProfile.companyWebsite || user.profile.companyWebsite;
+  user.profile.companyName =
+    updatedProfile.companyName || user.profile.companyName;
+  user.profile.companyWebsite =
+    updatedProfile.companyWebsite || user.profile.companyWebsite;
 
   // Update profile picture or resume
   if (filename) {
@@ -148,7 +157,7 @@ const applyProfileUpdates = (user, updatedProfile, filename) => {
     if (updatedProfile.resume) {
       user.profile.resume = filename;
     }
-  };
+  }
 };
 
 const deleteOldFiles = async (user) => {
@@ -159,7 +168,9 @@ const deleteOldFiles = async (user) => {
       deletePromises.push(fs.promises.unlink(`uploads/${user.profile.resume}`));
     }
     if (user.profile.profilePicture) {
-      deletePromises.push(fs.promises.unlink(`uploads/${user.profile.profilePicture}`));
+      deletePromises.push(
+        fs.promises.unlink(`uploads/${user.profile.profilePicture}`)
+      );
     }
 
     await Promise.all(deletePromises);
@@ -167,4 +178,4 @@ const deleteOldFiles = async (user) => {
     // Log the error but do not throw it to avoid stopping the update process
     console.error("Error deleting old files:", error);
   }
-};  
+};
